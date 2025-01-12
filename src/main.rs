@@ -31,14 +31,14 @@ async fn create_url(database: State<Database>, Json(body): Json<Url>) -> String 
         .map(char::from)
         .collect();
     let asdf = id.clone();
-    
+
     database.insert(id, body.url);
 
     asdf
 }
 
 async fn get_url(database: State<Database>, Path(id): Path<String>) -> String {
-    let database = database.write().expect("Error obtaining the lock");
+    let database = database.read().expect("Error obtaining the lock");
 
     match database.get(&id) {
         Some(url) => url.clone(),
